@@ -72,7 +72,7 @@ try {
             if (result && typeof result === 'object') {
                 const resultData = result;
 
-                if (resultData.data && typeof resultData.data === 'object') {
+                if (resultData.data && typeof resultData.data === 'object' && resultData.data.email) {
                     const linkedinResult = resultData.data;
 
                     await Actor.pushData(linkedinResult);
