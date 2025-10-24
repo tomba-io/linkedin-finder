@@ -5,47 +5,150 @@
         "properties": {
             "email": {
                 "type": "string",
-                "description": "Email address found for the LinkedIn profile"
+                "description": "linkedIn Profile email address"
             },
             "first_name": {
                 "type": ["string", "null"],
-                "description": "Person's first name"
+                "description": "linkedIn Profile first name"
             },
             "last_name": {
                 "type": ["string", "null"],
-                "description": "Person's last name"
+                "description": "linkedIn Profile last name"
             },
             "full_name": {
                 "type": ["string", "null"],
-                "description": "Person's full name"
-            },
-            "company": {
-                "type": ["string", "null"],
-                "description": "Person's company or organization"
-            },
-            "position": {
-                "type": ["string", "null"],
-                "description": "Person's job title or position"
-            },
-            "linkedin_url": {
-                "type": "string",
-                "description": "LinkedIn profile URL that was processed"
+                "description": "linkedIn Profile full name"
             },
             "website_url": {
                 "type": ["string", "null"],
-                "description": "Website URL associated with the person"
+                "description": "Website URL associated with the linkedIn Profile"
+            },
+            "company": {
+                "type": ["string", "null"],
+                "description": "linkedIn Profile company or organization"
+            },
+            "position": {
+                "type": ["string", "null"],
+                "description": "linkedIn Profile job title or position"
             },
             "country": {
                 "type": ["string", "null"],
-                "description": "Person's country"
+                "description": "linkedIn Profile country"
+            },
+            "gender": {
+                "type": ["string", "null"],
+                "description": "linkedIn Profile gender"
+            },
+            "twitter": {
+                "type": ["string", "null"],
+                "description": "linkedIn Profile Twitter profile URL"
+            },
+            "linkedin": {
+                "type": ["string", "null"],
+                "description": "linkedIn Profile LinkedIn profile URL"
             },
             "score": {
                 "type": ["number", "null"],
-                "description": "Confidence score for the email address (0-100)"
+                "description": "Confidence score for the linkedIn Profile information (0-100)"
+            },
+            "accept_all": {
+                "type": ["boolean", "null"],
+                "description": "Whether the domain accepts all emails"
+            },
+            "phone_number": {
+                "type": ["boolean", "null"],
+                "description": "Whether a phone number is available for this linkedIn Profile"
+            },
+            "info": {
+                "type": ["object", "null"],
+                "description": "Additional detailed information about the linkedIn Profile and source",
+                "properties": {
+                    "title": {
+                        "type": ["string", "null"],
+                        "description": "Page title where the linkedIn Profile was found"
+                    },
+                    "description": {
+                        "type": ["string", "null"],
+                        "description": "Page description or meta description"
+                    },
+                    "first_name": {
+                        "type": ["string", "null"],
+                        "description": "First name from page metadata"
+                    },
+                    "last_name": {
+                        "type": ["string", "null"],
+                        "description": "Last name from page metadata"
+                    },
+                    "full_name": {
+                        "type": ["string", "null"],
+                        "description": "Full name from page metadata"
+                    },
+                    "article_domain": {
+                        "type": ["string", "null"],
+                        "description": "Domain of the article or page"
+                    },
+                    "same_as_domain": {
+                        "type": ["string", "null"],
+                        "description": "Whether the domain matches expected domain"
+                    },
+                    "linkedin": {
+                        "type": ["string", "null"],
+                        "description": "LinkedIn handle from page metadata"
+                    },
+                    "twitter": {
+                        "type": ["string", "null"],
+                        "description": "Twitter handle from page metadata"
+                    },
+                    "phone": {
+                        "type": ["string", "null"],
+                        "description": "Phone number from page metadata"
+                    },
+                    "email": {
+                        "type": ["string", "null"],
+                        "description": "Email from page metadata"
+                    },
+                    "gender": {
+                        "type": ["string", "null"],
+                        "description": "Gender from page metadata"
+                    },
+                    "position": {
+                        "type": ["string", "null"],
+                        "description": "Position from page metadata"
+                    },
+                    "image": {
+                        "type": ["string", "null"],
+                        "description": "linkedIn Profile image URL from page metadata"
+                    },
+                    "gravatar": {
+                        "type": ["boolean", "null"],
+                        "description": "Whether linkedIn Profile has a Gravatar"
+                    },
+                    "emails": {
+                        "type": ["array", "null"],
+                        "description": "Array of additional emails found",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "verification": {
+                "type": ["object", "null"],
+                "description": "Email verification information from Tomba",
+                "properties": {
+                    "date": {
+                        "type": ["string", "null"],
+                        "description": "Date when the email was verified (ISO format)"
+                    },
+                    "status": {
+                        "type": ["string", "null"],
+                        "description": "Verification status (valid, invalid, unknown)"
+                    }
+                }
             },
             "sources": {
                 "type": ["array", "null"],
-                "description": "Sources where the email was found",
+                "description": "Sources where the linkedIn Profile information was found",
                 "items": {
                     "type": "object",
                     "properties": {
@@ -71,19 +174,15 @@
                         }
                     }
                 }
-            },
-            "source": {
-                "type": "string",
-                "description": "Source of the data (tomba_linkedin_finder)"
             }
         },
-        "required": ["email", "linkedin_url", "source"]
+        "required": ["email"]
     },
     "views": {
         "overview": {
             "title": "Overview",
             "transformation": {
-                "fields": ["email", "full_name", "position", "company", "linkedin_url", "score"]
+                "fields": ["email", "full_name", "position", "company", "website_url", "verification.status", "score"]
             },
             "display": {
                 "component": "table",
@@ -100,8 +199,11 @@
                     "company": {
                         "label": "Company"
                     },
-                    "linkedin_url": {
-                        "label": "LinkedIn URL"
+                    "website_url": {
+                        "label": "Website"
+                    },
+                    "verification.status": {
+                        "label": "Email Status"
                     },
                     "score": {
                         "label": "Confidence Score"
@@ -119,12 +221,16 @@
                     "full_name",
                     "position",
                     "company",
-                    "linkedin_url",
                     "website_url",
                     "country",
+                    "gender",
+                    "twitter",
+                    "linkedin",
                     "score",
-                    "sources",
-                    "source"
+                    "accept_all",
+                    "phone_number",
+                    "verification",
+                    "sources"
                 ]
             },
             "display": {
@@ -134,7 +240,7 @@
         "sources": {
             "title": "Source Analysis",
             "transformation": {
-                "fields": ["email", "full_name", "linkedin_url", "sources"]
+                "fields": ["email", "full_name", "sources"]
             },
             "display": {
                 "component": "table",
@@ -143,10 +249,7 @@
                         "label": "Email"
                     },
                     "full_name": {
-                        "label": "Person"
-                    },
-                    "linkedin_url": {
-                        "label": "LinkedIn Profile"
+                        "label": "linkedIn Profile"
                     },
                     "sources": {
                         "label": "Sources Found"
