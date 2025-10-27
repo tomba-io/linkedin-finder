@@ -205,3 +205,20 @@ Focus on source tracking and email discovery across multiple websites
 - **Compliance**: Respect LinkedIn's terms of service and privacy policies
 - [Integration with Airbyte](https://apify.com/integrations), Make, Zapier, Google Drive, and other apps
 - A short guide on how to build web scrapers using code templates:
+
+## Support
+
+If you need any help, have questions, or encounter any issues while using Tomba.io, please don't hesitate to reach out to our support team. You can contact us via:
+
+- **Email**: support@tomba.io
+- **Live chat**: Available on the Tomba.io website during business hours
+
+## Contributing
+
+We welcome contributions to improve this actor. Please feel free to submit issues, feature requests, or pull requests to help make this tool even better for the community.
+
+## About Tomba
+
+Founded in 2020, Tomba prides itself on being the most reliable, accurate, and in-depth source of email address data available anywhere. We process terabytes of data to produce our Email finder API.
+
+![Tomba Logo](https://tomba.io/logo.png)
