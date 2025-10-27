@@ -1,0 +1,14 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "title": "LinkedIn Finder Output",
+    "description": "Output from Tomba LinkedIn Finder Actor - LinkedIn profiles discovered for email addresses",
+    "type": "object",
+    "properties": {
+        "results": {
+            "type": "string",
+            "title": "LinkedIn Discovery Results",
+            "description": "LinkedIn profiles with professional information and connections",
+            "template": "{{links.apiDefaultDatasetUrl}}/items"
+        }
+    }
+}
