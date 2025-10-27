@@ -203,8 +203,10 @@ Focus on source tracking and email discovery across multiple websites
 - **Batch Processing**: Group LinkedIn URLs for efficiency
 - **Regular Updates**: Re-process profiles periodically for updated information
 - **Compliance**: Respect LinkedIn's terms of service and privacy policies
-- [Integration with Airbyte](https://apify.com/integrations), Make, Zapier, Google Drive, and other apps
-- A short guide on how to build web scrapers using code templates:
+
+## Keywords
+
+LinkedIn finder, LinkedIn profiles, professional networking, social media discovery, profile finder, LinkedIn search, professional contacts, social enrichment, contact discovery, professional intelligence, career profiles
 
 ## Support
 
