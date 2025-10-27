@@ -10,7 +10,8 @@
             "description": "Your Tomba API key (starts with 'ta_'). Get it from https://app.tomba.io/api",
             "example": "ta_xxxxxxxxxxxxxxxxxxxx",
             "isSecret": true,
-            "editor": "textfield"
+            "editor": "textfield",
+            "prefill": "ta_xxxxxxxxxxxxxxxxxxxx"
         },
         "tombaApiSecret": {
             "title": "Tomba API Secret",
@@ -18,7 +19,8 @@
             "description": "Your Tomba secret key (starts with 'ts_'). Get it from https://app.tomba.io/api",
             "example": "ts_xxxxxxxxxxxxxxxxxxxx",
             "isSecret": true,
-            "editor": "textfield"
+            "editor": "textfield",
+            "prefill": "ts_xxxxxxxxxxxxxxxxxxxx"
         },
         "linkedinUrls": {
             "title": "LinkedIn URLs",
@@ -36,7 +38,8 @@
                 "https://www.linkedin.com/in/john-doe",
                 "https://www.linkedin.com/in/jane-smith"
             ],
-            "editor": "stringList"
+            "editor": "stringList",
+            "prefill": ["https://www.linkedin.com/in/john-doe"]
         },
         "maxResults": {
             "title": "Maximum Results",
