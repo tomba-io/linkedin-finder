@@ -204,6 +204,89 @@ Focus on source tracking and email discovery across multiple websites
 - **Regular Updates**: Re-process profiles periodically for updated information
 - **Compliance**: Respect LinkedIn's terms of service and privacy policies
 
+## FAQ
+
+### General Questions
+
+**Q: What does LinkedIn finding do?**
+A: LinkedIn finding takes LinkedIn profile URLs and finds associated email addresses, phone numbers, and additional contact information for those professional profiles.
+
+**Q: How does this work with LinkedIn profiles?**
+A: The service analyzes LinkedIn profile information and matches it against email databases to find verified contact information associated with those professional profiles.
+
+**Q: What information can I get from LinkedIn profiles?**
+A: You can get email addresses, phone numbers, additional social profiles, professional details, and verification status for contacts found through LinkedIn.
+
+### Input & Usage
+
+**Q: What LinkedIn URL formats are supported?**
+A: Use standard LinkedIn profile URLs like "https://www.linkedin.com/in/username" or just the username part. Both formats are accepted.
+
+**Q: Can I process multiple LinkedIn profiles at once?**
+A: Yes, provide an array of LinkedIn URLs in the `linkedinUrls` parameter. You can process up to 1000 profiles per run.
+
+**Q: What if a LinkedIn profile doesn't have contact information?**
+A: Not all LinkedIn profiles have discoverable contact information. The result will show what's available, which may be limited for privacy-conscious professionals.
+
+**Q: Do I need special permissions to use LinkedIn URLs?**
+A: You should only use LinkedIn URLs for contacts you have legitimate business reasons to contact, in compliance with privacy laws and LinkedIn's terms of service.
+
+### Technical Questions
+
+**Q: What are the rate limits?**
+A: The Actor automatically handles Tomba's rate limits for LinkedIn processing. Large batches are processed with appropriate delays.
+
+**Q: How accurate are the found contact details?**
+A: Accuracy varies based on profile completeness and data availability. Professional profiles with more public information typically yield better results.
+
+**Q: Can I find contact info for any LinkedIn profile?**
+A: Success depends on data availability and privacy settings. Senior professionals and those in sales/marketing roles often have more discoverable contact information.
+
+**Q: What happens with private or restricted profiles?**
+A: Private profiles or those with limited public information may return minimal results. This respects user privacy preferences.
+
+### Data Quality & Privacy
+
+**Q: Where does the contact information come from?**
+A: Contact data comes from publicly available sources, professional databases, and information that LinkedIn users have made public or semi-public.
+
+**Q: Is this compliant with LinkedIn's terms of service?**
+A: The service uses only publicly available information and doesn't scrape LinkedIn directly. However, always ensure your use case complies with LinkedIn's terms and privacy policies.
+
+**Q: How fresh is the contact information?**
+A: Data freshness varies, but results include timestamps when available. Professional information changes over time, so periodic updates are recommended.
+
+**Q: Is this GDPR compliant?**
+A: Yes, the service only accesses publicly available information and follows privacy regulations. Ensure you have legitimate interests for contacting found individuals.
+
+### Business Applications
+
+**Q: How can I use this for recruitment?**
+A: Find contact information for potential candidates you've identified on LinkedIn, enabling direct outreach for job opportunities.
+
+**Q: Is this useful for sales prospecting?**
+A: Yes! Convert LinkedIn research into actionable contact lists for sales outreach, especially for B2B sales and partnership development.
+
+**Q: Can I use this for networking?**
+A: Absolutely! Find contact information for professionals you want to connect with for partnerships, collaborations, or industry networking.
+
+**Q: How does this help with lead generation?**
+A: Turn LinkedIn research into qualified leads by getting direct contact information for decision-makers and influencers in your target companies.
+
+### Best Practices
+
+**Q: How should I use found contact information?**
+A: Always personalize outreach, mention the LinkedIn connection, respect privacy preferences, and provide clear value in your communications.
+
+**Q: Should I verify the found email addresses?**
+A: Yes, consider using the Email Verifier actor to validate email addresses before important outreach campaigns.
+
+**Q: How can I improve success rates?**
+A: Focus on complete, active LinkedIn profiles. Profiles with more public information, company details, and professional history typically yield better results.
+
+**Q: What's the best way to handle large LinkedIn lists?**
+A: Process profiles in batches of 50-100, monitor your API usage, and consider the quality vs. quantity trade-off for your specific use case.
+
 ## Keywords
 
 LinkedIn finder, LinkedIn profiles, professional networking, social media discovery, profile finder, LinkedIn search, professional contacts, social enrichment, contact discovery, professional intelligence, career profiles
