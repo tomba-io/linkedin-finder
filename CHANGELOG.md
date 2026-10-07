@@ -22,6 +22,9 @@ All notable changes to this project will be documented in this file. See [standa
 - Each dataset item now includes `charged` and `cached`
 - URLs are trimmed and deduplicated
 - Every item now includes `linkedin_url` and `source`; failed lookups include an `error` field
+- Real-time API (Apify Standby mode): `GET /?url=…` or `POST /` with the run input returns results as JSON, with an OpenAPI web server schema
+- Key-value store schema for the default store (`INPUT`, `TOMBA_STATE`)
+- Default memory set to 256 MB
 
 ### Dependencies
 

@@ -173,6 +173,26 @@ Every row shows `chargedCredits`, `charged` and `cached`, so you always know wha
 - **Cache**: repeat lookups within 24 hours are free
 - **Clean input**: extra spaces and duplicate URLs are removed automatically
 
+## Real-time API
+
+Need an email instantly inside your own app or CRM? This Actor also runs as a **real-time API** (Apify Standby mode): no run to start, no dataset to fetch, just an HTTP request that returns JSON in seconds. Pricing is the same.
+
+```bash
+curl "https://<your-standby-url>/?url=https://www.linkedin.com/in/mattm&enrichMobile=true" \
+  -H "Authorization: Bearer <YOUR_APIFY_TOKEN>"
+```
+
+Repeat `url` (or separate URLs with commas) to look up several profiles; `full`, `webhookUrl` and `maxResults` work too. You can also `POST` the same JSON input as a normal run:
+
+```bash
+curl -X POST "https://<your-standby-url>/" \
+  -H "Authorization: Bearer <YOUR_APIFY_TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{"linkedinUrls": ["https://www.linkedin.com/in/mattm"], "enrichMobile": true, "full": false}'
+```
+
+The response is `{ "items": [...] }`, with the same rows as the dataset. Find your Standby URL and the full OpenAPI description in the **API** tab of this Actor.
+
 ## Integrations
 
 Run it on a schedule, call it from the Apify API, or connect it to Zapier, Make, Google Sheets, HubSpot, Slack and hundreds of other apps with [Apify integrations](https://docs.apify.com/platform/integrations). Webhooks let you trigger your own workflow as soon as a run finishes.

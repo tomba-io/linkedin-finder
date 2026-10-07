@@ -1,0 +1,512 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Tomba LinkedIn Finder API",
+        "version": "1.0.0",
+        "description": "Real-time API (Apify Standby mode). Find the email address (and optionally phone numbers) behind LinkedIn profile URLs. One credit costs $0.00312: 1 credit per profile, or 6 credits when phone data comes back (`enrichMobile`); with `full=true`, 1 credit per returned address plus 5 per phone number. Profiles unknown to Tomba, errors and cached results are free."
+    },
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Find emails for one or more LinkedIn profiles",
+                "description": "Without query parameters, returns a short usage note (also used as the readiness probe).",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "query",
+                        "description": "LinkedIn profile URL (https://www.linkedin.com/in/<handle>). Repeat the parameter or separate values with commas for several profiles.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "https://www.linkedin.com/in/mattm"
+                    },
+                    {
+                        "name": "urls",
+                        "in": "query",
+                        "description": "Alias of `url`.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "linkedinUrl",
+                        "in": "query",
+                        "description": "Alias of `url`.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "linkedinUrls",
+                        "in": "query",
+                        "description": "Alias of `url`.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "enrichMobile",
+                        "in": "query",
+                        "description": "Also return the phone numbers linked to each profile. A profile with phone data costs 6 credits instead of 1.",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "example": true
+                    },
+                    {
+                        "name": "full",
+                        "in": "query",
+                        "description": "Return every stored address (up to 2), one row per address; 1 credit per address plus 5 per phone number.",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    },
+                    {
+                        "name": "webhookUrl",
+                        "in": "query",
+                        "description": "Optional URL that Tomba also sends each result to (http:// or https://).",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "https://hooks.example.com/tomba"
+                    },
+                    {
+                        "name": "maxResults",
+                        "in": "query",
+                        "description": "Maximum number of LinkedIn profiles to process (default 50).",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "default": 50
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Results"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Error"
+                    },
+                    "402": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Find emails using a JSON input",
+                "description": "Accepts the same JSON input as a normal Actor run.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "linkedinUrls": {
+                                        "type": "array",
+                                        "description": "Array of LinkedIn profile URLs to extract emails from",
+                                        "example": [
+                                            "https://www.linkedin.com/in/mattm",
+                                            "https://www.linkedin.com/in/john-doe",
+                                            "https://www.linkedin.com/in/jane-smith"
+                                        ],
+                                        "minItems": 1,
+                                        "maxItems": 1000,
+                                        "uniqueItems": true,
+                                        "items": {
+                                            "type": "string",
+                                            "pattern": "^https://www\\.linkedin\\.com/in/[a-zA-Z0-9\\-_]+/?$"
+                                        }
+                                    },
+                                    "maxResults": {
+                                        "type": "integer",
+                                        "description": "Maximum number of LinkedIn profiles to process",
+                                        "minimum": 1,
+                                        "maximum": 10000,
+                                        "default": 50,
+                                        "example": 100
+                                    },
+                                    "enrichMobile": {
+                                        "type": "boolean",
+                                        "description": "Also return the phone numbers linked to each profile (in `phone_data` and `phoneNumbers`). A profile with phone data costs 6 credits instead of 1.",
+                                        "default": false
+                                    },
+                                    "full": {
+                                        "type": "boolean",
+                                        "description": "Return every email address Tomba has stored for the profile (up to 2) instead of the best one. You get one row and pay 1 credit per returned address, plus 5 credits per phone number when phone numbers are enabled.",
+                                        "default": false
+                                    },
+                                    "webhookUrl": {
+                                        "type": "string",
+                                        "description": "Optional URL that Tomba also sends each result to (sent as `webhook_url`). Must start with http:// or https://.",
+                                        "pattern": "^https?://"
+                                    },
+                                    "maxConcurrency": {
+                                        "type": "integer",
+                                        "description": "How many Tomba requests run in parallel. There is no rate limit, so raise it for large lists.",
+                                        "minimum": 1,
+                                        "maximum": 50,
+                                        "default": 10
+                                    },
+                                    "maxRetries": {
+                                        "type": "integer",
+                                        "description": "How many times to retry a request after a network error, 429 or 5xx response (exponential backoff). Failed requests are never charged.",
+                                        "minimum": 0,
+                                        "maximum": 10,
+                                        "default": 3
+                                    },
+                                    "useCache": {
+                                        "type": "boolean",
+                                        "description": "Reuse results from previous runs for identical requests. Cached results are free.",
+                                        "default": true
+                                    },
+                                    "cacheTtlHours": {
+                                        "type": "integer",
+                                        "description": "How long cached results stay valid. 0 disables the cross-run cache.",
+                                        "minimum": 0,
+                                        "maximum": 720,
+                                        "default": 24
+                                    }
+                                },
+                                "required": ["linkedinUrls"],
+                                "example": {
+                                    "linkedinUrls": ["https://www.linkedin.com/in/mattm"],
+                                    "enrichMobile": false,
+                                    "full": false
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Results"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Error"
+                    },
+                    "402": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "responses": {
+            "Results": {
+                "description": "Profile rows (one per returned address), in the same format as the dataset items.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/LinkedInProfile"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Error": {
+                "description": "Invalid input (400) or the run's max charge limit was reached (402).",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "schemas": {
+            "LinkedInProfile": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "linkedIn Profile email address"
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "linkedIn Profile first name"
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "linkedIn Profile last name"
+                    },
+                    "full_name": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "linkedIn Profile full name"
+                    },
+                    "website_url": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Website URL associated with the linkedIn Profile"
+                    },
+                    "company": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "linkedIn Profile company or organization"
+                    },
+                    "position": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "linkedIn Profile job title or position"
+                    },
+                    "country": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "linkedIn Profile country"
+                    },
+                    "gender": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "linkedIn Profile gender"
+                    },
+                    "twitter": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "linkedIn Profile Twitter profile URL"
+                    },
+                    "linkedin": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "linkedIn Profile LinkedIn profile URL"
+                    },
+                    "score": {
+                        "type": "number",
+                        "nullable": true,
+                        "description": "Confidence score for the linkedIn Profile information (0-100)"
+                    },
+                    "accept_all": {
+                        "type": "boolean",
+                        "nullable": true,
+                        "description": "Whether the domain accepts all emails"
+                    },
+                    "phone_number": {
+                        "type": "boolean",
+                        "nullable": true,
+                        "description": "Whether a phone number is available for this linkedIn Profile"
+                    },
+                    "info": {
+                        "type": "object",
+                        "nullable": true,
+                        "description": "Additional detailed information about the linkedIn Profile and source",
+                        "properties": {
+                            "title": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Page title where the linkedIn Profile was found"
+                            },
+                            "description": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Page description or meta description"
+                            },
+                            "first_name": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "First name from page metadata"
+                            },
+                            "last_name": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Last name from page metadata"
+                            },
+                            "full_name": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Full name from page metadata"
+                            },
+                            "article_domain": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Domain of the article or page"
+                            },
+                            "same_as_domain": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Whether the domain matches expected domain"
+                            },
+                            "linkedin": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "LinkedIn handle from page metadata"
+                            },
+                            "twitter": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Twitter handle from page metadata"
+                            },
+                            "phone": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Phone number from page metadata"
+                            },
+                            "email": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Email from page metadata"
+                            },
+                            "gender": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Gender from page metadata"
+                            },
+                            "position": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Position from page metadata"
+                            },
+                            "image": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "linkedIn Profile image URL from page metadata"
+                            },
+                            "gravatar": {
+                                "type": "boolean",
+                                "nullable": true,
+                                "description": "Whether linkedIn Profile has a Gravatar"
+                            },
+                            "emails": {
+                                "type": "array",
+                                "nullable": true,
+                                "description": "Array of additional emails found",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "verification": {
+                        "type": "object",
+                        "nullable": true,
+                        "description": "Email verification information from Tomba",
+                        "properties": {
+                            "date": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Date when the email was verified (ISO format)"
+                            },
+                            "status": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Verification status (valid, invalid, unknown)"
+                            }
+                        }
+                    },
+                    "sources": {
+                        "type": "array",
+                        "nullable": true,
+                        "description": "Sources where the linkedIn Profile information was found",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "uri": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "URI where the email was found"
+                                },
+                                "website_url": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "Website URL where the email was found"
+                                },
+                                "extracted_on": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "Date when the email was extracted (ISO format)"
+                                },
+                                "last_seen_on": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "Date when the email was last seen (ISO format)"
+                                },
+                                "still_on_page": {
+                                    "type": "boolean",
+                                    "nullable": true,
+                                    "description": "Whether the email is still on the page"
+                                }
+                            }
+                        }
+                    },
+                    "phone_data": {
+                        "type": "array",
+                        "nullable": true,
+                        "description": "Phone numbers returned by Tomba when phone numbers are enabled (enrichMobile)",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "number": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "Phone number"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "Line type, e.g. mobile"
+                                }
+                            }
+                        }
+                    },
+                    "phoneNumbers": {
+                        "type": "integer",
+                        "description": "How many phone numbers were returned for this address (0 unless enrichMobile is enabled and Tomba has a number); the numbers are in phone_data"
+                    },
+                    "chargedCredits": {
+                        "type": "integer",
+                        "description": "Credits billed for this row ($0.00312 each): 1, or 6 with phone data; with full=true, 1 per address plus 5 per phone number. 0 when not charged"
+                    },
+                    "charged": {
+                        "type": "boolean",
+                        "description": "Whether this request was charged (pay-per-event)"
+                    },
+                    "cached": {
+                        "type": "boolean",
+                        "description": "Whether the result came from the cache (free)"
+                    },
+                    "linkedin_url": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Input LinkedIn profile URL"
+                    },
+                    "source": {
+                        "type": "string",
+                        "description": "Data source identifier (tomba_linkedin_finder)"
+                    },
+                    "error": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Error message if the search failed"
+                    }
+                }
+            }
+        }
+    }
+}
