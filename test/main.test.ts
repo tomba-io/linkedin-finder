@@ -3,7 +3,14 @@ import assert from 'node:assert/strict';
 import { after, afterEach, describe, it } from 'node:test';
 
 import type { MockHandler, MockServer } from './helpers.js';
-import { removeStorage, runActor, startMockTomba, startStandbyActor, totalCharges } from './helpers.js';
+import {
+    inputSchemaErrors,
+    removeStorage,
+    runActor,
+    startMockTomba,
+    startStandbyActor,
+    totalCharges,
+} from './helpers.js';
 
 const MATT = 'https://www.linkedin.com/in/mattm';
 
@@ -552,5 +559,25 @@ describe('linkedin-finder standby (real-time API)', () => {
         } finally {
             await actor.stop();
         }
+    });
+});
+
+describe('input schema', () => {
+    it('accepts common LinkedIn profile URL forms', () => {
+        assert.deepEqual(
+            inputSchemaErrors({
+                linkedinUrls: [
+                    'https://www.linkedin.com/in/jane-doe',
+                    'https://linkedin.com/in/jane-doe/',
+                    'https://uk.linkedin.com/in/jane-doe?trk=public',
+                    'http://www.linkedin.com/in/jos%C3%A9-doe',
+                ],
+            }),
+            [],
+        );
+    });
+
+    it('rejects URLs that are not LinkedIn profiles', () => {
+        assert.notDeepEqual(inputSchemaErrors({ linkedinUrls: ['https://www.linkedin.com/company/stripe'] }), []);
     });
 });

@@ -31,6 +31,10 @@ All notable changes to this project will be documented in this file. See [standa
 - `tomba` upgraded to 1.1.1 (responses are now `{ data, rateLimit }`)
 - `apify` upgraded to 3.7.2
 
+### Bug Fixes
+
+- LinkedIn profile URLs without `www.`, with a country subdomain (`uk.linkedin.com`) or with a query string are accepted
+
 ### [0.0.3](https://github.com/tomba-io/linkedin-finder/compare/v0.0.2...v0.0.3) (2025-10-24)
 
 ### Bug Fixes
