@@ -35,6 +35,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
+- Dataset schema accepts `null` for every Tomba field and a boolean or string `phone_number`, so Apify's item validation can't fail a run
 - ensure email data is present before processing LinkedIn results ([993467c](https://github.com/tomba-io/linkedin-finder/commit/993467c0f08e25da41911d6f34087689f437bfe8))
 - update dataset schema descriptions for LinkedIn profile fields ([6f810bb](https://github.com/tomba-io/linkedin-finder/commit/6f810bb1f40ac6585a2c23a17de3f3d5609146f3))
 
