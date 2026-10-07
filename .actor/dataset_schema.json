@@ -5,7 +5,7 @@
         "type": "object",
         "properties": {
             "email": {
-                "type": "string",
+                "type": ["string", "null"],
                 "description": "linkedIn Profile email address"
             },
             "first_name": {
@@ -175,9 +175,54 @@
                         }
                     }
                 }
+            },
+            "phone_data": {
+                "type": ["array", "null"],
+                "description": "Phone numbers returned by Tomba when phone numbers are enabled (enrichMobile)",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "number": {
+                            "type": ["string", "null"],
+                            "description": "Phone number"
+                        },
+                        "type": {
+                            "type": ["string", "null"],
+                            "description": "Line type, e.g. mobile"
+                        }
+                    }
+                }
+            },
+            "phoneNumbers": {
+                "type": "integer",
+                "description": "How many phone numbers were returned for this address (0 unless enrichMobile is enabled and Tomba has a number); the numbers are in phone_data"
+            },
+            "chargedCredits": {
+                "type": "integer",
+                "description": "Credits billed for this row ($0.00312 each): 1, or 6 with phone data; with full=true, 1 per address plus 5 per phone number. 0 when not charged"
+            },
+            "charged": {
+                "type": "boolean",
+                "description": "Whether this request was charged (pay-per-event)"
+            },
+            "cached": {
+                "type": "boolean",
+                "description": "Whether the result came from the cache (free)"
+            },
+            "linkedin_url": {
+                "type": ["string", "null"],
+                "description": "Input LinkedIn profile URL"
+            },
+            "source": {
+                "type": "string",
+                "description": "Data source identifier (tomba_linkedin_finder)"
+            },
+            "error": {
+                "type": ["string", "null"],
+                "description": "Error message if the search failed"
             }
         },
-        "required": ["email"]
+        "required": ["linkedin_url", "source"]
     },
     "views": {
         "overview": {
@@ -216,6 +261,7 @@
             "title": "Detailed View",
             "transformation": {
                 "fields": [
+                    "linkedin_url",
                     "email",
                     "first_name",
                     "last_name",
@@ -230,8 +276,14 @@
                     "score",
                     "accept_all",
                     "phone_number",
+                    "phoneNumbers",
                     "verification",
-                    "sources"
+                    "sources",
+                    "source",
+                    "error",
+                    "chargedCredits",
+                    "charged",
+                    "cached"
                 ]
             },
             "display": {
